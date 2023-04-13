@@ -5,7 +5,18 @@ fn index() -> &'static str {
     "Hello, World!"
 }
 
-#[launch]
-fn rocket() -> _ {
-    rocket::build().mount("/", routes![index])
+#[get("/world")]
+fn world() -> &'static str {
+    "Hello, world!"
+}
+
+#[rocket::main]
+async fn main() -> Result<(), rocket::Error> {
+    let _rocket = rocket::build()
+        .mount("/", routes![index])
+        .mount("/hello", routes![world])
+        .launch()
+        .await?;
+
+        Ok(())
 }
